@@ -46,10 +46,26 @@ app.get('/blogs', (req, res) => {
             res.render('index', {blogs: blogs});
         }
     });
-})
+});
+
+//New route
+app.get('/blogs/new', (req, res) => {
+    res.render('new');
+});
 
 
-
+//create route
+app.post('/blogs', (req, res) => {
+    //create blog
+    Blog.create(req.body.blog, function(err, newBlog){
+        if (err){
+            res.render('new');
+        }else{
+            //then redirect to the index 
+            res.redirect('/blogs');
+        }
+    });
+});
 
 app.listen(3000,() => {
     console.log('Your blog app server is started');
