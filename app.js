@@ -3,6 +3,7 @@ var app = express();
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 
+//APP CONFIG
 mongoose.connect("mongodb://localhost/restful_blog_app");
 
 //title,image,body,created
@@ -13,13 +14,41 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 
 //work on mongoose schema 
-//schema
+//schema //MONGOOSE/MODEL CONFIG
 var blogSchema = new mongoose.Schema({
     title: String,
     image: String,
     body: String,
     created: {type: Date, default: Date.now}
+});
+
+//model
+var Blog = mongoose.model('Blog', blogSchema);
+
+/* Blog.create({
+    title: 'Test Blog',
+    image: 'https://static.pexels.com/photos/248797/pexels-photo-248797.jpeg',
+    body: 'Hello this is a blog post'
+}); */
+
+//RESTFUL ROUTES
+//Index route
+app.get('/', (req, res) => {
+    res.redirect('/blogs');
+});
+
+
+app.get('/blogs', (req, res) => {
+    Blog.find({}, function(err, blogs){
+        if (err){
+            console.log('error');
+        }else{
+            res.render('index', {blogs: blogs});
+        }
+    });
 })
+
+
 
 
 app.listen(3000,() => {
