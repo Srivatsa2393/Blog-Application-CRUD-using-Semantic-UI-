@@ -2,6 +2,7 @@ var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+var methodOverride = require('method-override');
 
 //APP CONFIG
 mongoose.connect("mongodb://localhost/restful_blog_app");
@@ -11,6 +12,7 @@ mongoose.connect("mongodb://localhost/restful_blog_app");
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(methodOverride("_method"));
 
 
 //work on mongoose schema 
@@ -89,6 +91,17 @@ app.get('/blogs/:id/edit', (req, res) => {
         }
     });
 });
+
+//Update route
+app.put('/blogs/:id', (req, res) => {
+    Blog.findByIdAndUpdate(req.params.id, req.body.blog, function(err, updatedBlog) {
+        if (err) {
+            res.redirect("/blogs");
+        }
+        res.redirect('/blogs/' + req.params.id);
+    });
+    //res.send('Update route');
+})
 
 app.listen(3000,() => {
     console.log('Your blog app server is started');
