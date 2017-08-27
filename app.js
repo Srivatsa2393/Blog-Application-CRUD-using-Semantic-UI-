@@ -67,6 +67,18 @@ app.post('/blogs', (req, res) => {
     });
 });
 
+//Show route
+app.get('/blogs/:id', (req, res) => {
+    //res.send('Show page');
+    Blog.findById(req.params.id, function(err, foundBlog){
+        if (err) {
+            res.redirect('/blogs');
+        }else {
+            res.render('show', {blog: foundBlog})
+        }
+    });
+});
+
 app.listen(3000,() => {
     console.log('Your blog app server is started');
 })
