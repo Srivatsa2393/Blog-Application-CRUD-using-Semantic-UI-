@@ -103,6 +103,20 @@ app.put('/blogs/:id', (req, res) => {
     //res.send('Update route');
 })
 
+//Delete route
+app.delete('/blogs/:id', (req, res) => {
+    //res.send('Deleted the route');
+    //destroy blog
+    Blog.findByIdAndRemove(req.params.id, function(err){
+        if (err) {
+            res.redirect('/blogs');
+        }else {
+            res.redirect('/blogs');
+        }
+    })
+    //redirect somewhere
+});
+
 app.listen(3000,() => {
     console.log('Your blog app server is started');
 })
